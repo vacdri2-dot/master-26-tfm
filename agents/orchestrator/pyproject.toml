@@ -1,0 +1,19 @@
+[project]
+name = "orchestrator"
+version = "0.1.0"
+description = "Orchestrator agent — routes tasks to specialized agents"
+requires-python = ">=3.12"
+dependencies = [
+    "shared",
+    "langgraph>=1.1,<2.0",
+    "langchain-openai>=1.1,<2.0",
+    "langchain-core>=1.2,<2.0",
+    "azure-identity>=1.19",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+shared = { workspace = true }

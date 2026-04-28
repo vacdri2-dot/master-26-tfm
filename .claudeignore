@@ -1,0 +1,32 @@
+# Virtual environments and caches
+.venv/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+__pycache__/
+
+# Terraform state and provider plugins
+*.tfstate
+*.tfstate.*
+**/.terraform/*
+
+# Build artifacts
+dist/
+*.egg-info/
+
+# Git internals
+.git/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lock files (large, not useful for context)
+uv.lock
+
+# Reference docs (local only)
+.reference/

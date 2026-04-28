@@ -1,0 +1,9 @@
+model = "gpt-5.5"
+
+model_provider = "openai"
+
+model_reasoning_effort = "high"
+
+[mcp_servers.linear]
+command = "npx"
+args = ["-y", "mcp-remote", "https://mcp.linear.app/mcp"]

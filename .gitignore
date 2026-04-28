@@ -1,0 +1,54 @@
+# Reference docs (local only, not tracked)
+.reference/
+
+# Environment files
+.env
+.env.*
+
+# Terraform
+*.tfstate
+*.tfstate.*
+**/.terraform/*
+*.tfvars
+!infra/environments/*/terraform.tfvars
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# IMPORTANT: keep provider lock file tracked
+!**/.terraform.lock.hcl
+
+# Auto-generated backend config (created by bootstrap-backend.sh)
+infra/environments/*/backend.hcl
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.tmp/
+.pre-commit-cache/
+dist/
+*.egg-info/
+
+# IMPORTANT: keep uv lockfile tracked
+!uv.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
+credentials.json
+
+.claude/worktrees/

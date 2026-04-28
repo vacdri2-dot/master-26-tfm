@@ -1,0 +1,64 @@
+subscription_id = "<YOUR_AZURE_SUBSCRIPTION_ID>"
+
+# Must support Azure OpenAI, Container Apps, and AI Search.
+location            = "swedencentral"
+environment         = "dev"
+project_name        = "tfm-g2"
+resource_group_name = "rg-tfm-g2-dev"
+
+# Optional: restrict var.location to a whitelist (e.g. tenant Azure Policy).
+# allowed_locations = ["norwayeast", "polandcentral", "italynorth", "germanywestcentral", "swedencentral"]
+
+vnet_cidr = "10.20.0.0/16"
+
+subnet_cidrs = {
+  container_apps    = "10.20.0.0/23"
+  private_endpoints = "10.20.2.0/24"
+  data              = "10.20.3.0/24"
+  langfuse          = "10.20.4.0/24"
+}
+
+# Optional image overrides if tags differ from :latest
+# agent_images = {
+#   orchestrator = "acr...azurecr.io/orchestrator:dev"
+#   rag          = "acr...azurecr.io/rag:dev"
+#   code         = "acr...azurecr.io/code-agent:dev"
+# }
+
+# Optional plain env vars by agent key
+# agent_env_vars = {
+#   orchestrator = {
+#     AZURE_OPENAI_API_VERSION = "2024-10-21"
+#   }
+# }
+
+# Optional Key Vault secret references by agent key.
+# Values are secret IDs:
+# /subscriptions/.../resourceGroups/.../providers/Microsoft.KeyVault/vaults/<vault>/secrets/<name>/<version>
+# agent_key_vault_env_secrets = {
+#   orchestrator = {
+#     AZURE_OPENAI_ENDPOINT                 = "/subscriptions/.../secrets/openai-endpoint/<version>"
+#     AZURE_OPENAI_CHAT_DEPLOYMENT          = "/subscriptions/.../secrets/openai-chat-deployment/<version>"
+#     APPLICATIONINSIGHTS_CONNECTION_STRING = "/subscriptions/.../secrets/appinsights-connection-string/<version>"
+#   }
+#   rag = {
+#     APPLICATIONINSIGHTS_CONNECTION_STRING = "/subscriptions/.../secrets/appinsights-connection-string/<version>"
+#   }
+#   code = {
+#     APPLICATIONINSIGHTS_CONNECTION_STRING = "/subscriptions/.../secrets/appinsights-connection-string/<version>"
+#   }
+# }
+
+# Optional Container App sizing overrides (defaults: port 8000, replicas 0-3, 0.5 vCPU, 1Gi memory).
+# agent_container_port = 8000
+# agent_min_replicas   = 0
+# agent_max_replicas   = 3
+# agent_cpu            = 0.5
+# agent_memory         = "1Gi"
+
+# Uncomment to import an existing Azure OpenAI account instead of creating one.
+# openai_existing_account_id = "/subscriptions/<SUB_ID>/resourceGroups/<RG>/providers/Microsoft.CognitiveServices/accounts/<NAME>"
+
+# Suffixes to avoid global name collisions (Azure OpenAI subdomain and ACR names are tenant-wide unique).
+# openai_subdomain_suffix = "<short-unique-suffix>"
+# acr_name_suffix         = "<short-unique-suffix>"

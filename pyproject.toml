@@ -1,0 +1,73 @@
+[project]
+name = "tfm"
+version = "0.1.0"
+description = "Autonomous AI Agents Platform on Azure"
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = [
+    "shared",
+    "agents/*",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15",
+    "pyright>=1.1.400",
+    "pytest>=9.0",
+    "pytest-asyncio>=1.0",
+    "httpx>=0.28",
+    "pre-commit>=4.5",
+    "detect-secrets>=1.5",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes (unused imports, undefined names)
+    "I",     # isort (import ordering)
+    "S",     # flake8-bandit (security: hardcoded passwords, exec, etc.)
+    "UP",    # pyupgrade (use modern Python syntax)
+    "B",     # flake8-bugbear (common bugs and design problems)
+    "ASYNC", # flake8-async (async antipatterns: blocking calls in async)
+    "T20",   # flake8-print (no print() in production code)
+    "RUF",   # Ruff-specific rules
+]
+ignore = [
+    "E501",  # line too long — handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",  # assert is fine in tests
+    "S106",  # hardcoded passwords are fine in test fixtures
+]
+"shared/tests/**/*.py" = [
+    "S101",  # assert is fine in tests
+    "S106",  # hardcoded passwords are fine in test fixtures
+]
+"agents/*/tests/**/*.py" = [
+    "S101",  # assert is fine in tests
+    "S106",  # hardcoded passwords are fine in test fixtures
+]
+"agents/*/scripts/**/*.py" = [
+    "T20",   # print is fine in CLI scripts
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "standard"
+include = ["agents", "shared"]
+exclude = ["**/__pycache__", "**/.venv", "**/node_modules"]
+reportMissingTypeStubs = "none"
+reportUnusedImport = "error"
+reportUnusedVariable = "warning"

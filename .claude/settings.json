@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "enabledMcpjsonServers": [
+    "linear",
+    "Azure",
+    "docs-langchain"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path // .tool_input.filePath // empty' < /dev/stdin) && [ -n \"$file\" ] && case \"$file\" in *.py) uv run ruff format --quiet \"$file\" 2>/dev/null ;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path // .tool_input.filePath // empty' < /dev/stdin) && [ -n \"$file\" ] && case \"$file\" in .env|*/.env|.env.*|*/.env.*|*.pem|*.key|credentials.json|*/credentials.json|.secrets.baseline|*/.secrets.baseline|infra/environments/*/backend.hcl|*/infra/environments/*/backend.hcl) echo \"Protected file: $file\" >&2; exit 2;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.stop_hook_active // false' < /dev/stdin | grep -q true && exit 0; changed=$({ git diff --name-only 2>/dev/null; git diff --cached --name-only 2>/dev/null; git ls-files --others --exclude-standard 2>/dev/null; } | sort -u); errors=''; py_files=$(printf '%s\n' \"$changed\" | grep '\\.py$' || true); tf_files=$(printf '%s\n' \"$changed\" | grep '\\.tf$' || true); if [ -n \"$py_files\" ]; then if ! ruff_out=$(printf '%s\n' \"$py_files\" | tr '\\n' '\\0' | xargs -0 uv run ruff check 2>&1); then errors=\"$errors\nRuff issues:\n$ruff_out\"; fi; fi; if [ -n \"$tf_files\" ]; then if ! fmt_out=$(printf '%s\n' \"$tf_files\" | tr '\\n' '\\0' | xargs -0 terraform fmt -check 2>&1); then errors=\"$errors\nUnformatted Terraform:\n$fmt_out\"; fi; fi; [ -n \"$errors\" ] && printf '%b\n' \"$errors\" >&2 && exit 2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}

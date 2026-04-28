@@ -1,0 +1,39 @@
+services:
+  orchestrator:
+    build:
+      context: .
+      args:
+        PACKAGE: orchestrator
+        AGENT_DIR: orchestrator
+        MODULE: orchestrator
+    ports:
+      - "8001:8000"
+    environment:
+      - RAG_AGENT_URL=http://rag:8000
+      - CODE_AGENT_URL=http://code-agent:8000
+      - ORCHESTRATOR_REQUIRE_AUTH=false
+    depends_on:
+      rag:
+        condition: service_healthy
+      code-agent:
+        condition: service_healthy
+
+  rag:
+    build:
+      context: .
+      args:
+        PACKAGE: rag
+        AGENT_DIR: rag
+        MODULE: rag
+    ports:
+      - "8002:8000"
+
+  code-agent:
+    build:
+      context: .
+      args:
+        PACKAGE: code-agent
+        AGENT_DIR: code
+        MODULE: code_agent
+    ports:
+      - "8003:8000"
